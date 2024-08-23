@@ -24,41 +24,41 @@
         </button>
     </div>
 
-<!--    <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded " style="padding-top: 30px">-->
-<!--        <div class="row" style="padding-left: 50px; padding-top:15px">-->
-<!--            <div class="col-md-2">-->
-<!--                <h3 class="text-primary">Bộ lọc:</h3>-->
-<!--            </div>-->
-<!--            <div class="col-md-3" style="padding-right: 50px;">-->
-<!--                <form th:action="@{/Voucher/search}" method="get">-->
-<!--                    <input type="text" class="form-control border-primary" name="key" placeholder="Tên voucher...">-->
-<!--                </form>-->
-<!--            </div>-->
-<!--            <div class="col-md-3">-->
-<!--                <select id="inputState" class="form-select border-primary">-->
-<!--                    <option selected>Trạng thái...</option>-->
-<!--                    <option>...</option>-->
-<!--                </select>-->
-<!--            </div>-->
-<!--            <div class="col-md-2 ">-->
-<!--                <a >-->
-<!--                    <button type="button"  class="btn btn-outline-primary"> <i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i>Tìm-->
-<!--                    </button>-->
-<!--                </a>-->
-<!--                <a th:href="@{/Voucher/back}">-->
-<!--                    <button type="button"  class="btn btn-outline-primary"><i class="fa-solid fa-rotate-right" style="color: #000000;"></i>Mới-->
-<!--                    </button>-->
-<!--                </a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <!--    <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded " style="padding-top: 30px">-->
+    <!--        <div class="row" style="padding-left: 50px; padding-top:15px">-->
+    <!--            <div class="col-md-2">-->
+    <!--                <h3 class="text-primary">Bộ lọc:</h3>-->
+    <!--            </div>-->
+    <!--            <div class="col-md-3" style="padding-right: 50px;">-->
+    <!--                <form th:action="@{/Voucher/search}" method="get">-->
+    <!--                    <input type="text" class="form-control border-primary" name="key" placeholder="Tên voucher...">-->
+    <!--                </form>-->
+    <!--            </div>-->
+    <!--            <div class="col-md-3">-->
+    <!--                <select id="inputState" class="form-select border-primary">-->
+    <!--                    <option selected>Trạng thái...</option>-->
+    <!--                    <option>...</option>-->
+    <!--                </select>-->
+    <!--            </div>-->
+    <!--            <div class="col-md-2 ">-->
+    <!--                <a >-->
+    <!--                    <button type="button"  class="btn btn-outline-primary"> <i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i>Tìm-->
+    <!--                    </button>-->
+    <!--                </a>-->
+    <!--                <a th:href="@{/Voucher/back}">-->
+    <!--                    <button type="button"  class="btn btn-outline-primary"><i class="fa-solid fa-rotate-right" style="color: #000000;"></i>Mới-->
+    <!--                    </button>-->
+    <!--                </a>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
 </header>
 <a th:href="@{/trangchu/download_template}" class="btn btn-info">dowmload_template</a>
 <button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#import">
- import
+    import
 </button>
 <button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#lichsu">
-   lịch sử import
+    lịch sử import
 </button>
 <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
     <table class="table" style="padding-top:150px">
@@ -221,7 +221,25 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="import" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" style="color: red">import nhân viên</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/trangchu/import}" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" accept=".xlsx"/>
+                    <button type="submit">Upload</button>
+                </form>
+                <div th:if="${param.error}">
+                    <p style="color: red;">Có lỗi xảy ra khi import file. Vui lòng thử lại.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="lichsu" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -316,7 +334,7 @@
             }
         });
 
-        // Validation for update form
+
         document.querySelector("#update form").addEventListener("submit", function(event) {
             const emailFe = document.getElementById("accountFeUpdate").value;
             const emailFpt = document.getElementById("accountFptUpdate").value;
@@ -349,3 +367,4 @@
 
 </body>
 </html>
+

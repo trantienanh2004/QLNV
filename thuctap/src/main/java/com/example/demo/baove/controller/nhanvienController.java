@@ -127,21 +127,21 @@ public class nhanvienController {
 
         staff existingStaff = nhanvienService.timkiemStaff(staff.getId());
 
-        // Kiểm tra mã nhân viên mới
+
         if (!existingStaff.getStaffcode().equals(staff.getStaffcode()) &&
                 nhanvienService.findByStaffCode(staff.getStaffcode()).isPresent()) {
             redirectAttributes.addFlashAttribute("staffCodeErrorup", "Mã nhân viên đã tồn tại");
             return "redirect:/trangchu/nhanvien";
         }
 
-        // Kiểm tra email FE mới
+
         if (!existingStaff.getAccountfe().equals(staff.getAccountfe()) &&
                 nhanvienService.findByAccountFe(staff.getAccountfe()).isPresent()) {
             redirectAttributes.addFlashAttribute("accountFeErrorup", "Email FE đã tồn tại");
             return "redirect:/trangchu/nhanvien";
         }
 
-        // Kiểm tra email FPT mới
+
         if (!existingStaff.getAccountfpt().equals(staff.getAccountfpt()) &&
                 nhanvienService.findByAccountFpt(staff.getAccountfpt()).isPresent()) {
             redirectAttributes.addFlashAttribute("accountFptErrorup", "Email FPT đã tồn tại");

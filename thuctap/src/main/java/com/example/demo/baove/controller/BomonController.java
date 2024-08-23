@@ -31,24 +31,24 @@ public class BomonController {
     public String hienthi(Model model, @PathVariable("id") UUID id) {
         staff staff = nhanvienService.timkiemStaff(id);
 
-        // Lấy danh sách các bộ môn (staffMajorFacility) của nhân viên
+
         List<staffMajorFacility> filteredBM = qlbmService.GetAllStaff().stream()
                 .filter(bm -> bm.getStaff().getId().equals(staff.getId()))
                 .collect(Collectors.toList());
 
-        // Lấy danh sách tất cả các cơ sở từ dịch vụ
+
         List<facility> allFacilities = x.getallfacility();
 
-        // Lọc các cơ sở đã tồn tại
+
         List<facility> availableFacilities = allFacilities.stream()
                 .filter(f -> filteredBM.stream()
                         .noneMatch(bm -> bm.getMajorFacility().getDepartmentFacility().getFacility().getId().equals(f.getId())))
                 .collect(Collectors.toList());
 
-        // Cập nhật model với danh sách cơ sở đã lọc
+
         model.addAttribute("department", x.getalldepartment());
         model.addAttribute("major", x.getallmajor());
-        model.addAttribute("facility", availableFacilities); // Truyền danh sách cơ sở đã lọc
+        model.addAttribute("facility", availableFacilities);
         model.addAttribute("staff", staff);
         model.addAttribute("ListBM", filteredBM);
         idday = id;
@@ -58,28 +58,30 @@ public class BomonController {
     @GetMapping("/delete/{id}")
     public String xoaBM(@PathVariable("id") UUID id) {
         try {
-            // Tìm kiếm bản ghi staffMajorFacility dựa trên ID
+
             staffMajorFacility staffMajorFacilities = x.timkiemstaffMF(id);
 
             if (staffMajorFacilities != null) {
                 UUID majorFacilityId = staffMajorFacilities.getMajorFacility().getId();
                 UUID departmentFacilityId = staffMajorFacilities.getMajorFacility().getDepartmentFacility().getId();
+
                 x.xoaBM(staffMajorFacilities.getId());
                 x.xoaMajoyF(majorFacilityId);
                 x.xoadepartmentF(departmentFacilityId);
 
-                return "redirect:/trangchu/bomon/"+ idday;
+                return "redirect:/trangchu/bomon/" + idday;
             } else {
-                return "redirect:/trangchu/bomon?error=notfound";
+                return "redirect:/trangchu/bomon/" + idday;
             }
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
-            return "redirect:/trangchu/bomon?error=dataintegrity";
+            return "redirect:/trangchu/bomon/" + idday;
         } catch (Exception e) {
             e.printStackTrace();
-            return "redirect:/trangchu/bomon?error=unexpected";
+            return "redirect:/trangchu/bomon/" + idday;
         }
     }
+
 
     @PostMapping("/addBM")
     public String addBM(@RequestParam("departmentSelect") UUID departmentId,

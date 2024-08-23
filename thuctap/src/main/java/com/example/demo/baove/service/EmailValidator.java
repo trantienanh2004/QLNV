@@ -9,8 +9,8 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
 
     @Override
     public void initialize(ValidEmail constraintAnnotation) {
-        // Bạn cần xác định cách nào để lấy giá trị từ annotation
-        this.domain = constraintAnnotation.domain(); // Giả sử bạn có thuộc tính `domain` trong annotation
+
+        this.domain = constraintAnnotation.domain();
     }
 
     @Override
