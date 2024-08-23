@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{/TrangChu::dynamic(~{::body})}">-->
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>quản lý nhân viên</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/bd9b5e640d.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+            integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+            crossorigin="anonymous"></script>
+</head>
+<body class="container" >
+<header>
+    <h1 class="text-danger text-center">quản lý nhân viên</h1>
+
+    <div style="text-align: right">
+        <button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#add">
+            <i class="fa-solid fa-plus" style="color: #fcfcfc; top: 20px"></i>
+        </button>
+    </div>
+
+<!--    <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded " style="padding-top: 30px">-->
+<!--        <div class="row" style="padding-left: 50px; padding-top:15px">-->
+<!--            <div class="col-md-2">-->
+<!--                <h3 class="text-primary">Bộ lọc:</h3>-->
+<!--            </div>-->
+<!--            <div class="col-md-3" style="padding-right: 50px;">-->
+<!--                <form th:action="@{/Voucher/search}" method="get">-->
+<!--                    <input type="text" class="form-control border-primary" name="key" placeholder="Tên voucher...">-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <div class="col-md-3">-->
+<!--                <select id="inputState" class="form-select border-primary">-->
+<!--                    <option selected>Trạng thái...</option>-->
+<!--                    <option>...</option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div class="col-md-2 ">-->
+<!--                <a >-->
+<!--                    <button type="button"  class="btn btn-outline-primary"> <i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i>Tìm-->
+<!--                    </button>-->
+<!--                </a>-->
+<!--                <a th:href="@{/Voucher/back}">-->
+<!--                    <button type="button"  class="btn btn-outline-primary"><i class="fa-solid fa-rotate-right" style="color: #000000;"></i>Mới-->
+<!--                    </button>-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+</header>
+<a th:href="@{/trangchu/download_template}" class="btn btn-info">dowmload_template</a>
+<button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#import">
+ import
+</button>
+<button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#lichsu">
+   lịch sử import
+</button>
+<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+    <table class="table" style="padding-top:150px">
+        <thead class="table-primary ">
+        <tr>
+            <th>STT</th>
+            <th>Mã nhân viên</th>
+            <th>tên nhân viên</th>
+            <th>Email FPT</th>
+            <th>Email FE</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody class="table-group-divider ">
+        <tr th:each="nv,i: ${Listnhanvien}">
+            <td th:text="${i.count}"></td>
+            <td th:text="${nv.staffcode}"></td>
+            <td th:text="${nv.name}"></td>
+            <td th:text="${nv.accountfe}"></td>
+            <td th:text="${nv.accountfpt}"></td>
+            <td th:text="${nv.status== 1 ?'hoạt động':'không hoạt động'}"></td>
+
+            <td>
+                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#update"
+                   th:data-staff-id="${nv.id}" th:data-staff-code="${nv.staffcode}"
+                   th:data-staff-name="${nv.name}" th:data-staff-fe="${nv.accountfe}"
+                   th:data-staff-fpt="${nv.accountfpt}">
+                    <i class="fa-regular fa-pen-to-square" style="color: #000000; font-size: 25px"></i>
+                </a>
+
+                <a th:href="@{/trangchu/status/{id} (id=${nv.id})}">
+                    <i class="fa-solid fa-trash-can" style="color: #000000;font-size: 25px"></i>
+                </a>
+                <a th:href="@{/trangchu/bomon/{id} (id=${nv.id})}">
+                    <i class="fa-solid fa-eye" style="color: #000000;font-size: 25px"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <!-- Trang trước -->
+            <li class="page-item" th:if="${currentPage > 0}">
+                <a class="page-link" th:href="@{/trangchu/nhanvien(page=${currentPage - 1})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <!-- Các trang số -->
+            <li class="page-item" th:each="i : ${#numbers.sequence(0,totalPages - 1)}">
+                <a class="page-link" th:href="@{/trangchu/nhanvien(page=${i})}" th:text="${i + 1}"></a>
+            </li>
+            <!-- Trang tiếp theo -->
+            <li class="page-item" th:if="${currentPage < totalPages - 1}">
+                <a class="page-link" th:href="@{/trangchu/nhanvien(page=${currentPage + 1})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<div class="modal fade" id="add" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" style="color: red">Thêm nhân viên</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-4" th:action="@{/trangchu/add}" th:object="${staff}" th:method="post" novalidate>
+                    <div class="col-md-6">
+                        <label class="form-label"><a style="color: #ff0000">*</a>Mã nhân viên</label>
+                        <input type="text" th:field="*{staffcode}" class="form-control" placeholder="Mã nhân viên..." required
+                               maxlength="15" pattern="\S+" title="Mã nhân viên không được chứa khoảng trắng và không được dài hơn 15 ký tự">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label"><a style="color: red">*</a>Tên nhân viên</label>
+                        <input type="text" th:field="*{name}" class="form-control" placeholder="Tên nhân viên..."
+                               required maxlength="100" pattern="\S+" title="Tên nhân viên không được chứa khoảng trắng và không được dài hơn 100 ký tự">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="accountFe"><a style="color: red">*</a>Email FE</label>
+                        <input type="text" th:field="*{accountfe}" id="accountFe" class="form-control"
+                               placeholder="Email FE..." required maxlength="100" pattern="^[a-zA-Z0-9._%+-]+@fe\.edu\.vn$"
+                               title="Email FE phải kết thúc với đuôi @fe.edu.vn và không được chứa khoảng trắng">
+                        <p id="emailFeError" class="error" style="color: red"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="accountFpt"><a style="color: red">*</a>Email FPT</label>
+                        <input type="text" th:field="*{accountfpt}" id="accountFpt" class="form-control"
+                               placeholder="Email FPT..." required maxlength="100" pattern="^[a-zA-Z0-9._%+-]+@fpt\.edu\.vn$"
+                               title="Email FPT phải kết thúc với đuôi @fpt.edu.vn và không được chứa khoảng trắng">
+                        <p id="emailFptError" class="error" style="color: red"></p>
+                    </div>
+                    <div th:if="${staffCodeError != null}">
+                        <p class="text-danger" th:text="${staffCodeError}"></p>
+                    </div>
+                    <div th:if="${accountFeError != null}">
+                        <p class="text-danger" th:text="${accountFeError}"></p>
+                    </div>
+                    <div th:if="${accountFptError != null}">
+                        <p class="text-danger" th:text="${accountFptError}"></p>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary">Gửi</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="update" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" style="color: red">Cập nhật nhân viên</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-4" th:action="@{/trangchu/update}" th:object="${staffupdate}" th:method="post" novalidate>
+                    <input type="hidden" th:field="*{id}" name="id"/>
+                    <div class="col-md-6">
+                        <label class="form-label"><a style="color: #ff0000">*</a>Mã nhân viên</label>
+                        <input type="text" th:field="*{staffcode}" class="form-control" placeholder="Mã nhân viên..." required
+                               maxlength="15" pattern="\S+" title="Mã nhân viên không được chứa khoảng trắng và không được dài hơn 15 ký tự">
+                        <div th:if="${staffCodeErrorup != null}" class="text-danger" th:text="${staffCodeErrorup}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label"><a style="color: red">*</a>Tên nhân viên</label>
+                        <input type="text" th:field="*{name}" class="form-control" placeholder="Tên nhân viên..."
+                               required maxlength="100" pattern="\S+" title="Tên nhân viên không được chứa khoảng trắng và không được dài hơn 100 ký tự">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="accountFeUpdate"><a style="color: red">*</a>Email FE</label>
+                        <input type="text" th:field="*{accountfe}" id="accountFeUpdate" class="form-control"
+                               placeholder="Email FE..." required maxlength="100" pattern="^[a-zA-Z0-9._%+-]+@fe\.edu\.vn$"
+                               title="Email FE phải kết thúc với đuôi @fe.edu.vn và không được chứa khoảng trắng">
+                        <div th:if="${accountFeErrorup != null}" class="text-danger" th:text="${accountFeErrorup}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="accountFptUpdate"><a style="color: red">*</a>Email FPT</label>
+                        <input type="text" th:field="*{accountfpt}" id="accountFptUpdate" class="form-control"
+                               placeholder="Email FPT..." required maxlength="100" pattern="^[a-zA-Z0-9._%+-]+@fpt\.edu\.vn$"
+                               title="Email FPT phải kết thúc với đuôi @fpt.edu.vn và không được chứa khoảng trắng">
+                        <div th:if="${accountFptErrorup != null}" class="text-danger" th:text="${accountFptErrorup}"></div>
+                    </div>
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary">Gửi</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="clearUpdateErrors()">Đóng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="lichsu" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" style="color: red">lịch sử inport</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Ngày tạo</th>
+                        <th scope="col">Nội dung</th>
+                        <th scope="col">Đường dẫn</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item, iterStat : ${lichsuList}">
+                        <th scope="row" th:text="${iterStat.index + 1}"></th>
+                        <td th:text="${item.ngaytao}"></td>
+                        <td th:text="${item.noidung}"></td>
+                        <td th:text="${item.duongdan}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script>
+    function clearUpdateErrors() {
+        // Xóa các thông báo lỗi khi đóng modal
+        document.querySelectorAll('.text-danger').forEach(el => el.textContent = '');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Modal update
+        var updateModal = document.getElementById('update');
+        updateModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var staffId = button.getAttribute('data-staff-id');
+            var staffCode = button.getAttribute('data-staff-code');
+            var staffName = button.getAttribute('data-staff-name');
+            var staffFe = button.getAttribute('data-staff-fe');
+            var staffFpt = button.getAttribute('data-staff-fpt');
+
+            var inputStaffId = updateModal.querySelector('input[name="id"]');
+            var inputStaffCode = updateModal.querySelector('input[name="staffcode"]');
+            var inputStaffName = updateModal.querySelector('input[name="name"]');
+            var inputStaffFe = updateModal.querySelector('input[name="accountfe"]');
+            var inputStaffFpt = updateModal.querySelector('input[name="accountfpt"]');
+
+            inputStaffId.value = staffId;
+            inputStaffCode.value = staffCode;
+            inputStaffName.value = staffName;
+            inputStaffFe.value = staffFe;
+            inputStaffFpt.value = staffFpt;
+        });
+
+        // Validation for add form
+        document.querySelector("#add form").addEventListener("submit", function(event) {
+            const emailFe = document.getElementById("accountFe").value;
+            const emailFpt = document.getElementById("accountFpt").value;
+
+            let valid = true;
+
+            if (!emailFe.match(/^[a-zA-Z0-9._%+-]+@fe\.edu\.vn$/)) {
+                document.getElementById("emailFeError").textContent = "Email FE phải kết thúc với đuôi @fe.edu.vn";
+                valid = false;
+            } else {
+                document.getElementById("emailFeError").textContent = "";
+            }
+
+            if (!emailFpt.match(/^[a-zA-Z0-9._%+-]+@fpt\.edu\.vn$/)) {
+                document.getElementById("emailFptError").textContent = "Email FPT phải kết thúc với đuôi @fpt.edu.vn";
+                valid = false;
+            } else {
+                document.getElementById("emailFptError").textContent = "";
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+
+        // Validation for update form
+        document.querySelector("#update form").addEventListener("submit", function(event) {
+            const emailFe = document.getElementById("accountFeUpdate").value;
+            const emailFpt = document.getElementById("accountFptUpdate").value;
+            let valid = true;
+            if (!emailFe.match(/^[a-zA-Z0-9._%+-]+@fe\.edu\.vn$/)) {
+                document.querySelector("#update .text-danger").textContent = "Email FE phải kết thúc với đuôi @fe.edu.vn";
+                valid = false;
+            } else {
+                document.querySelector("#update .text-danger").textContent = "";
+            }
+
+            if (!emailFpt.match(/^[a-zA-Z0-9._%+-]+@fpt\.edu\.vn$/)) {
+                document.querySelector("#update .text-danger").textContent = "Email FPT phải kết thúc với đuôi @fpt.edu.vn";
+                valid = false;
+            } else {
+                document.querySelector("#update .text-danger").textContent = "";
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+    });
+
+    function clearUpdateErrors() {
+        document.querySelector("#update .text-danger").textContent = "";
+    }
+</script>
+
+
+</body>
+</html>
